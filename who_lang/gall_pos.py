@@ -89,41 +89,7 @@ class Gall_pos():
         else:
             return math.sqrt(sq)
     
-    def _parse_kw(self, relative, **kwargs):
-        for kw in kwargs:
-            if isinstance(kwargs[kw], (int, float)):
-                if kw in ('x', 'X', 'rel_x', 'rel_X'):
-                    if relative:
-                        self.x *= kwargs[kw]
-                    else:
-                        self.x = kwargs[kw]
-                elif kw in ('y', 'Y', 'rel_y', 'rel_Y'):
-                    if relative:
-                        self.y *= kwargs[kw]
-                    else:
-                        self.y = kwargs[kw]
-                elif kw in ('abs_x', 'abs_X'):
-                    self.abs_x = kwargs[kw]
-                elif kw in ('abs_y', 'abs_Y'):
-                    self.abs_y = kwargs[kw]
-                elif kw in ('ang', 'Ang', 'angle', 'Angle'):
-                    if relative:
-                        self.angle += kwargs[kw]
-                    else:
-                        self.angle = kwargs[kw]
-                elif kw in ('d', 'dist', 'Dist', 'distance', 'Distance'):
-                    if relative:
-                        self.distance *= kwargs[kw]
-                    else:
-                        self.distance = kwargs[kw]
-                else:
-                    print(f"Warning: Value {kw} = {kwargs[kw]} was ignored.")
-            elif kw in ('center'):
-                self.center = kwargs[kw]
-            elif kw in ('circle'):
-                self.circle = kwargs[kw]
-            else:
-                print(f"Warning: Keyword {kw} = {kwargs[kw]} was ignored.")
+    
 
     def set_pos(self, relative, **kwargs):
         self._parse_kw(relative, **kwargs)
@@ -162,6 +128,7 @@ class Gall_pos():
             raise TypeError('Invalid type given')
         return X2 - self.abs_x
 
+
     def Y_to(self, other):
         if isinstance(other,Gall_pos):
             Y2 = other.abs_y
@@ -177,6 +144,42 @@ class Gall_pos():
         else:
             raise TypeError('Invalid type given')
         return Y2 - self.abs_y
+
+    def _parse_kw(self, relative, **kwargs):
+        for kw in kwargs:
+            if isinstance(kwargs[kw], (int, float)):
+                if kw in ('x', 'X', 'rel_x', 'rel_X'):
+                    if relative:
+                        self.x *= kwargs[kw]
+                    else:
+                        self.x = kwargs[kw]
+                elif kw in ('y', 'Y', 'rel_y', 'rel_Y'):
+                    if relative:
+                        self.y *= kwargs[kw]
+                    else:
+                        self.y = kwargs[kw]
+                elif kw in ('abs_x', 'abs_X'):
+                    self.abs_x = kwargs[kw]
+                elif kw in ('abs_y', 'abs_Y'):
+                    self.abs_y = kwargs[kw]
+                elif kw in ('ang', 'Ang', 'angle', 'Angle'):
+                    if relative:
+                        self.angle += kwargs[kw]
+                    else:
+                        self.angle = kwargs[kw]
+                elif kw in ('d', 'dist', 'Dist', 'distance', 'Distance'):
+                    if relative:
+                        self.distance *= kwargs[kw]
+                    else:
+                        self.distance = kwargs[kw]
+                else:
+                    print(f"Warning: Value {kw} = {kwargs[kw]} was ignored.")
+            elif kw in ('center'):
+                self.center = kwargs[kw]
+            elif kw in ('circle'):
+                self.circle = kwargs[kw]
+            else:
+                print(f"Warning: Keyword {kw} = {kwargs[kw]} was ignored.")
 
     def _reset_from_abs(self):
         'overwrite x,y & ang,d based on abs_pos'
