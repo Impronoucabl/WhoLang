@@ -2,7 +2,6 @@
 
 'Positions at 0 distance have undefined angle.'
 
-from ast import Num
 import math
 import common as cm
 
