@@ -1,6 +1,6 @@
 #import math
 #import common as cm
-import gall_pos.Gall_pos as gpos
+from gall_pos import Gall_pos as gpos
 
 
 class Gall_cir():
