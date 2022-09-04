@@ -20,11 +20,13 @@ class Gall_cir():
                     self.parent = kwargs[kw]
                 else:
                     raise TypeError('Parent is not a Gall_cir') 
-            if kw == 'thickness':
+            elif kw == 'thickness':
                 if isinstance(kwargs[kw], (int,float)):
                     self.thickness = kwargs[kw]
                 else:
                     print('Warning: Thickness given was ignored')
+            elif kw == 'diction':
+                self.diction = kwargs[kw]
                 
         if isinstance(text, str):
             self.text = text
@@ -61,6 +63,40 @@ class Gall_cir():
         else:
             oth_rad = 0
         return  total - self.radius - oth_rad
+
+    def spawn_letters(self):
+        if isinstance(self.children, dict):
+            looper = self.children.values()
+        else:
+            looper = self.children
+        for n in looper:
+            n.spawn_letters()
+
+    def spawn_nodes(self):
+        if isinstance(self.children, dict):
+            looper = self.children.values()
+        else:
+            looper = self.children
+        for n in looper:
+            n.spawn_nodes()
+
+    def spawn_syllables(self):
+        if isinstance(self.children, dict):
+            looper = self.children.values()
+        else:
+            looper = self.children
+        for n in looper:
+            n.spawn_syllables()
+    
+    def update(self):
+        self.pos.update()
+        if isinstance(self.children, dict):
+            looper = self.children.values()
+        else:
+            looper = self.children
+        for n in looper:
+            n.pos.update()
         
+
         
         

@@ -88,8 +88,6 @@ class Gall_pos():
             return sq
         else:
             return math.sqrt(sq)
-    
-    
 
     def set_pos(self, relative, **kwargs):
         self._parse_kw(relative, **kwargs)
@@ -111,6 +109,7 @@ class Gall_pos():
 
     def update(self):
         self._set_abs_pos()
+        self._reset_from_abs()
 
     def X_to(self, other):
         if isinstance(other,Gall_pos):

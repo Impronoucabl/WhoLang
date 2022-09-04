@@ -31,8 +31,12 @@ class Diction():
         return {k.capitalize():v for (k,v) in cdict.items()}
     
     @staticmethod
-    def _doubleDict(cDict):
-        return {k*2:v for (k,v) in cDict.items()}
+    def _doubleDict(cdict):
+        return {k*2:v for (k,v) in cdict.items()}
+    
+    @staticmethod
+    def _extDict(cdict):
+        return {**cdict,**cm.cDictExt}
     
     @staticmethod
     def _stackDict(cDict):

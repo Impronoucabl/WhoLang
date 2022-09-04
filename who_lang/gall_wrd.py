@@ -12,15 +12,15 @@ class G_word(cir):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if 'diction' in kwargs:
-            self.diction = kwargs['diction']
-        else:
+        if 'diction' not in kwargs:
             self.diction = Diction()
-        if self.children == {}:
-            syllables = self.diction.str_to_sylDict(self.text)
-            radius = 100
-            pos = (0,0)
-            for (k,v) in syllables.items():
-                self.children[k] = syl(v, radius, pos)
+    
+    def spawn_syllables(self):
+        self.children == {}
+        syllables = self.diction.str_to_sylDict(self.text)
+        radius = 100
+        pos = (0,0)
+        for (k,v) in syllables.items():
+            self.children[k] = syl(v, radius, pos, parent=self)
         
     
