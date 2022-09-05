@@ -11,8 +11,8 @@ class Gall_syl(cir):
         self.ltr_dict = self.diction.str_to_sylDict(self.text)
         self.children = []
         for i in self.ltr_dict.values():
-            radius = 20
-            self.children.append(g_let(i,radius,self.pos,parent=self))
+            self.children.append(g_let(i,self.radius,self.pos,parent=self))
+        self.prime = self.children[0]
 
     def next_syl(self):
         syl = False

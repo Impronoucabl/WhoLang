@@ -7,6 +7,7 @@ class Gall_cir():
     
     children = None
     parent = None
+    origin = gpos((0,0), center=(0,0))
     thickness = 5
     
     def __init__(self, text, radius, pos, **kwargs):
@@ -63,7 +64,13 @@ class Gall_cir():
         else:
             oth_rad = 0
         return  total - self.radius - oth_rad
-
+    
+    def lottie_radius(self):
+        return self.radius + self.thickness/2
+    
+    def lottie_Mradius(self):
+        return self.radius - self.thickness/2
+    
     def spawn_letters(self):
         if isinstance(self.children, dict):
             looper = self.children.values()

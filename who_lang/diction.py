@@ -14,6 +14,8 @@ class Diction():
     def __init__(self, letter_dict = None):
         if letter_dict is None:
             self._clear_dict()
+        else:
+            self.diction = letter_dict
         self._clear_buff()
     
     def _clear_buff(self):
@@ -62,7 +64,7 @@ class Diction():
     
     def _set_capital(self):
         self.capital = True
-        self.diction.update(self.UpperDict(self.diction))
+        self.diction.update(self._UpperDict(self.diction))
     
     def str_to_sylDict(self, text):
         text = text.strip()

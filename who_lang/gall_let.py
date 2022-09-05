@@ -1,6 +1,15 @@
 from gall_cir import Gall_cir as cir
+import common as cm
 
 class Gall_let(cir):
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.cType = self._get_cType(self.text)
+    
+    @staticmethod
+    def _get_cType(text, cdict = {**cm.cDict,**cm.cDictVow, **cm.cDictExt}):
+        return cdict[text]
     
     def spawn_letters(self):
         return

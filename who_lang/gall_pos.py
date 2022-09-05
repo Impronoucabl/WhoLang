@@ -15,6 +15,7 @@ class Gall_pos():
     'If no center is given, assume the natural origin is the center'
     'Generally, we should avoid referencing this class variable, unless the position was defined by absolut units only.'
     center = (0,0)
+    lottie_center = (256,256)
 
     def __len__():
         return 2
@@ -26,7 +27,7 @@ class Gall_pos():
     def __init__(self, *args, **kwargs) -> None:
         if 'pos_type' in kwargs:
             pos_type = kwargs['pos_type']
-        elif args[1] is not None:
+        elif len(args) > 1:
             pos_type = args[1]
         elif isinstance(args[0], str):
             pos_type = args[0]
@@ -89,6 +90,15 @@ class Gall_pos():
         else:
             return math.sqrt(sq)
 
+    def lottie_ord(self):
+        return (self.lottie_x(), self.lottie_y())
+    
+    def lottie_x(self):
+        return self.lottie_center[0] + self.abs_x
+    
+    def lottie_y(self):
+        return self.lottie_center[1] - self.abs_y
+    
     def set_pos(self, relative, **kwargs):
         self._parse_kw(relative, **kwargs)
         if 'abs_x' in kwargs or 'abs_y' in kwargs:
@@ -207,8 +217,12 @@ class Gall_pos():
     
     def _set_rad_pos(self):
         'overwrite ang,d based on x,y'
-        self.angle = cm.MathRad2GalRad(math.atan2(self.y, self.x))
-        self.distance = math.sqrt(self.y**2 + self.x**2)
+        if self.x == 0 and self.y == 0:
+            self.angle = None
+            self.distance = 0
+        else:
+            self.angle = cm.MathRad2GalRad(math.atan2(self.y, self.x))
+            self.distance = math.sqrt(self.y**2 + self.x**2)
 
     def _set_rel_abs_pos(self):
         'overwrite x,y based on (ang,d)'
