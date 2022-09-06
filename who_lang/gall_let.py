@@ -5,6 +5,7 @@ class Gall_let(cir):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.text=self.text.lower()
         self.cType = self._get_cType(self.text)
     
     @staticmethod

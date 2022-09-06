@@ -218,7 +218,7 @@ class Gall_pos():
     def _set_rad_pos(self):
         'overwrite ang,d based on x,y'
         if self.x == 0 and self.y == 0:
-            self.angle = None
+            self.angle = 0
             self.distance = 0
         else:
             self.angle = cm.MathRad2GalRad(math.atan2(self.y, self.x))

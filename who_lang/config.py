@@ -1,0 +1,14 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Sep  6 20:55:23 2022
+
+@author: natha
+"""
+DEFAULT_DIST_RATIO = 1
+T_STEM_DIST_RATIO = 1
+B_STEM_GAP = -15
+J_STEM_GAP = 25
+
+DEFAULT_LETTER_SIZE = 50
+DEFAULT_VOWEL_SIZE = 15
+DEFAULT_A_GAP = 35

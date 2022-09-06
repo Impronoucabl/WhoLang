@@ -8,7 +8,7 @@ class Gall_cir():
     children = None
     parent = None
     origin = gpos((0,0), center=(0,0))
-    thickness = 5
+    thickness = 10
     
     def __init__(self, text, radius, pos, **kwargs):
         
