@@ -10,9 +10,13 @@ class Gall_cir():
     origin = gpos((0,0), center=(0,0))
     thickness = 10
     
+    def __repr__(self):
+        return self.text
+    
     def __init__(self, text, radius, pos, **kwargs):
         
         self.children = {}
+        self.nodes = set()
         for kw in kwargs:
             if kw == 'children':
                 self.children = kwargs[kw]
@@ -86,6 +90,7 @@ class Gall_cir():
             looper = self.children
         for n in looper:
             n.spawn_nodes()
+            self.nodes.update(n.nodes)
 
     def spawn_syllables(self):
         if isinstance(self.children, dict):
@@ -102,7 +107,7 @@ class Gall_cir():
         else:
             looper = self.children
         for n in looper:
-            n.pos.update()
+            n.update()
         
 
         

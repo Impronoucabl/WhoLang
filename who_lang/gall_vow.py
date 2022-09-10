@@ -21,7 +21,6 @@ class Gall_vow(g_let):
             self.rel_ang = 0
             angle = self.parent.pos.angle
             dist = cf.DEFAULT_A_GAP + self.parent.parent.radius - self.parent.pos.distance
-            self.pos.set_pos(False, ang=angle, dist=dist)
         elif self.text == 'o':
             self.rel_ang = math.pi
             angle = cm.SmallPosAngle(self.parent.pos.angle + math.pi)
@@ -31,10 +30,13 @@ class Gall_vow(g_let):
             dist = 0
         self.pos.set_pos(False, ang=angle, dist=dist)
         
+    def set_to_rel_ang(self):
+        self.pos.set_pos(False, ang=cm.SmallPosAngle(self.parent.pos.angle + self.rel_ang))
+        
     def update(self):
         if self.pos.distance != 0:
-            angle = cm.SmallPosAngle(self.parent.pos.angle + self.rel_ang)
-            self.pos.set_pos(False, ang=angle)
+            self.reset_pos()
+            self.set_to_rel_ang()
         super().update()
                 
             

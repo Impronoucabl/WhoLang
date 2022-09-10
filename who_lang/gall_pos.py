@@ -181,6 +181,11 @@ class Gall_pos():
                         self.distance *= kwargs[kw]
                     else:
                         self.distance = kwargs[kw]
+                elif kw in ('rel_ang', 'rel_angle'):
+                    if relative:
+                        self.rel_angle += kwargs[kw]
+                    else:
+                        self.rel_angle = kwargs[kw]
                 else:
                     print(f"Warning: Value {kw} = {kwargs[kw]} was ignored.")
             elif kw in ('center'):

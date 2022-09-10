@@ -45,9 +45,7 @@ class Gall_syl(cir):
             self.children.append(char)
         self.prime = self.children[0]
         self.cType = self.prime.cType
-        self.reset_dist()
-
-    
+        self.reset_dist()   
                 
     @staticmethod
     def spawn_syllables():
