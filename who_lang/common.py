@@ -11,6 +11,7 @@ def SmallPosAngle(radian):
 
 vowels = tuple('aeiouAEIOU')
 punc = tuple('.?!\'"-,;:')
+PI = math.pi
 
 cDict = {# (cType, feature Type, feature number)
     'b' : (1,0,0), #No features

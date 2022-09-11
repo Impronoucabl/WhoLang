@@ -22,9 +22,9 @@ class Gall_syl(cir):
         if self.cType is None or self.cType[0] in (0,3,4):
             dist = self.parent.radius*cf.T_STEM_DIST_RATIO
         elif self.cType[0] == 1:
-            dist = self.parent.radius - self.prime.radius - cf.B_STEM_GAP
+            dist = self.parent.radius - self.prime.max_radius() - cf.B_STEM_GAP
         elif self.cType[0] == 2:
-            dist = self.parent.radius - self.prime.radius - cf.J_STEM_GAP
+            dist = self.parent.radius - self.prime.max_radius() - cf.J_STEM_GAP
         else:
             dist = self.parent.radius
         self.pos.set_pos(False,dist=dist)
@@ -46,7 +46,15 @@ class Gall_syl(cir):
         self.prime = self.children[0]
         self.cType = self.prime.cType
         self.reset_dist()   
-                
+    
+    "syllables don't actually have useful radii, so this just propogates the change to all children"
+    def set_radius(self, radius, relative = False):
+        self.radius = self.prime.radius
+        super().set_radius(radius, relative = relative)
+        ratio = self.radius/self.prime.radius
+        for lett in self.children:
+            lett.set_radius(ratio, relative = True)
+            
     @staticmethod
     def spawn_syllables():
         return

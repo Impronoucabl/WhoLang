@@ -1,14 +1,14 @@
 #import math
 #import common as cm
+import config as cf
 from gall_pos import Gall_pos as gpos
-
 
 class Gall_cir():
     
     children = None
     parent = None
     origin = gpos((0,0), center=(0,0))
-    thickness = 10
+    thickness = cf.DEFAULT_CIR_THICK
     
     def __repr__(self):
         return self.text
@@ -69,11 +69,11 @@ class Gall_cir():
             oth_rad = 0
         return  total - self.radius - oth_rad
     
-    def lottie_radius(self):
-        return self.radius + self.thickness/2
+    def max_radius(self):
+        return self.radius*(1 + self.thickness/2)
     
-    def lottie_Mradius(self):
-        return self.radius - self.thickness/2
+    def min_radius(self):
+        return self.radius*(1 - self.thickness/2)
     
     def spawn_letters(self):
         if isinstance(self.children, dict):
