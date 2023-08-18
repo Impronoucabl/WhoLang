@@ -15,6 +15,7 @@ class Gall_pos():
     'If no center is given, assume the natural origin is the center'
     'Generally, we should avoid referencing this class variable, unless the position was defined by absolut units only.'
     center = (0,0)
+    lottie_center = (256,256)
 
     def __len__():
         return 2
@@ -26,7 +27,7 @@ class Gall_pos():
     def __init__(self, *args, **kwargs) -> None:
         if 'pos_type' in kwargs:
             pos_type = kwargs['pos_type']
-        elif args[1] is not None:
+        elif len(args) > 1:
             pos_type = args[1]
         elif isinstance(args[0], str):
             pos_type = args[0]
@@ -88,7 +89,71 @@ class Gall_pos():
             return sq
         else:
             return math.sqrt(sq)
+
+    def lottie_ord(self):
+        return (self.lottie_x(), self.lottie_y())
     
+    def lottie_x(self):
+        return self.lottie_center[0] + self.abs_x
+    
+    def lottie_y(self):
+        return self.lottie_center[1] - self.abs_y
+    
+    def set_pos(self, relative, **kwargs):
+        self._parse_kw(relative, **kwargs)
+        if 'abs_x' in kwargs or 'abs_y' in kwargs:
+            self._reset_from_abs()
+        else:
+            rel = False
+            for rel_abs in ('x', 'X', 'rel_x', 'rel_X', 'y', 'Y', 'rel_y', 'rel_Y'):
+                if rel_abs in kwargs:
+                    self._set_rad_pos()
+                    rel = True
+                    break
+            if not rel:
+                for radial in ('ang', 'Ang', 'angle', 'Angle', 'd', 'dist', 'Dist', 'distance', 'Distance'):
+                    if radial in kwargs:
+                        self._set_rel_abs_pos()
+                        break
+            self._set_abs_pos()
+
+    def update(self):
+        self._set_abs_pos()
+        self._reset_from_abs()
+
+    def X_to(self, other):
+        if isinstance(other,Gall_pos):
+            X2 = other.abs_x
+        elif isinstance(other.pos, Gall_pos):
+            X2 = other.pos.abs_x
+        elif isinstance(other,(list, tuple)):
+            if len(other) != 2:
+                raise LookupError('Sequential is too large')
+            else:
+                X2 = other[0]
+        elif isinstance(other,(int, float)):
+            X2 = other
+        else:
+            raise TypeError('Invalid type given')
+        return X2 - self.abs_x
+
+
+    def Y_to(self, other):
+        if isinstance(other,Gall_pos):
+            Y2 = other.abs_y
+        elif isinstance(other.pos, Gall_pos):
+            Y2 = other.pos.abs_y
+        elif isinstance(other,(list, tuple)):
+            if len(other) != 2:
+                raise LookupError('Sequential is too large')
+            else:
+                Y2 = other[-1]
+        elif isinstance(other,(int, float)):
+            Y2 = other
+        else:
+            raise TypeError('Invalid type given')
+        return Y2 - self.abs_y
+
     def _parse_kw(self, relative, **kwargs):
         for kw in kwargs:
             if isinstance(kwargs[kw], (int, float)):
@@ -116,6 +181,11 @@ class Gall_pos():
                         self.distance *= kwargs[kw]
                     else:
                         self.distance = kwargs[kw]
+                elif kw in ('rel_ang', 'rel_angle'):
+                    if relative:
+                        self.rel_angle += kwargs[kw]
+                    else:
+                        self.rel_angle = kwargs[kw]
                 else:
                     print(f"Warning: Value {kw} = {kwargs[kw]} was ignored.")
             elif kw in ('center'):
@@ -124,59 +194,6 @@ class Gall_pos():
                 self.circle = kwargs[kw]
             else:
                 print(f"Warning: Keyword {kw} = {kwargs[kw]} was ignored.")
-
-    def set_pos(self, relative, **kwargs):
-        self._parse_kw(relative, **kwargs)
-        if 'abs_x' in kwargs or 'abs_y' in kwargs:
-            self._reset_from_abs()
-        else:
-            rel = False
-            for rel_abs in ('x', 'X', 'rel_x', 'rel_X', 'y', 'Y', 'rel_y', 'rel_Y'):
-                if rel_abs in kwargs:
-                    self._set_rad_pos()
-                    rel = True
-                    break
-            if not rel:
-                for radial in ('ang', 'Ang', 'angle', 'Angle', 'd', 'dist', 'Dist', 'distance', 'Distance'):
-                    if radial in kwargs:
-                        self._set_rel_abs_pos()
-                        break
-            self._set_abs_pos()
-
-    def update(self):
-        self._set_abs_pos()
-
-    def X_to(self, other):
-        if isinstance(other,Gall_pos):
-            X2 = other.abs_x
-        elif isinstance(other.pos, Gall_pos):
-            X2 = other.pos.abs_x
-        elif isinstance(other,(list, tuple)):
-            if len(other) != 2:
-                raise LookupError('Sequential is too large')
-            else:
-                X2 = other[0]
-        elif isinstance(other,(int, float)):
-            X2 = other
-        else:
-            raise TypeError('Invalid type given')
-        return X2 - self.abs_x
-
-    def Y_to(self, other):
-        if isinstance(other,Gall_pos):
-            Y2 = other.abs_y
-        elif isinstance(other.pos, Gall_pos):
-            Y2 = other.pos.abs_y
-        elif isinstance(other,(list, tuple)):
-            if len(other) != 2:
-                raise LookupError('Sequential is too large')
-            else:
-                Y2 = other[-1]
-        elif isinstance(other,(int, float)):
-            Y2 = other
-        else:
-            raise TypeError('Invalid type given')
-        return Y2 - self.abs_y
 
     def _reset_from_abs(self):
         'overwrite x,y & ang,d based on abs_pos'
@@ -205,8 +222,12 @@ class Gall_pos():
     
     def _set_rad_pos(self):
         'overwrite ang,d based on x,y'
-        self.angle = cm.MathRad2GalRad(math.atan2(self.y, self.x))
-        self.distance = math.sqrt(self.y**2 + self.x**2)
+        if self.x == 0 and self.y == 0:
+            self.angle = 0
+            self.distance = 0
+        else:
+            self.angle = cm.MathRad2GalRad(math.atan2(self.y, self.x))
+            self.distance = math.sqrt(self.y**2 + self.x**2)
 
     def _set_rel_abs_pos(self):
         'overwrite x,y based on (ang,d)'
